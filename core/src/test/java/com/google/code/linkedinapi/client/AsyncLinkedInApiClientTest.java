@@ -31,6 +31,11 @@ import com.google.code.linkedinapi.schema.Network;
 import com.google.code.linkedinapi.schema.People;
 import com.google.code.linkedinapi.schema.Person;
 import com.google.code.linkedinapi.schema.UpdateComments;
+import org.junit.After;
+import static org.junit.Assert.*;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.BeforeClass;
 
 /**
  * @author Nabeel Mukhtar
@@ -38,10 +43,17 @@ import com.google.code.linkedinapi.schema.UpdateComments;
  */
 public class AsyncLinkedInApiClientTest extends LinkedInApiClientTest {
 	private AsyncLinkedInApiClient client;
-	
-	/** 
-	 * @see com.google.code.linkedinapi.client.LinkedInApiClientTest#setUp()
-	 */
+
+    @BeforeClass
+    public static void setUpClass() {
+        Assume.assumeTrue("LinkedIn API keys and other settings are required",
+                TestConstants.isOAuthTestsRunnable());
+    }
+
+    /**
+     * @see com.google.code.linkedinapi.client.LinkedInApiClientTest#setUp()
+     */
+    @Before
 	public void setUp() throws Exception {
 		super.setUp();
 		client = factory.createAsyncLinkedInApiClient(accessToken);
@@ -50,6 +62,7 @@ public class AsyncLinkedInApiClientTest extends LinkedInApiClientTest {
 	/**
 	 * @see com.google.code.linkedinapi.client.LinkedInApiClientTest#tearDown()
 	 */
+    @After
 	public void tearDown() throws Exception {
 		super.tearDown();
 		client = null;

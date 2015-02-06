@@ -66,12 +66,14 @@ import com.google.code.linkedinapi.schema.Person;
 import com.google.code.linkedinapi.schema.Products;
 import com.google.code.linkedinapi.schema.UpdateComments;
 import com.google.code.linkedinapi.schema.VisibilityType;
+import static org.junit.Assert.*;
+import org.junit.Assume;
 
 /**
  * @author Nabeel Mukhtar
  *
  */
-public abstract class LinkedInApiClientTest extends TestCase {
+public abstract class LinkedInApiClientTest {
 
     /** Field description */
     protected LinkedInApiClientFactory factory;
@@ -89,7 +91,10 @@ public abstract class LinkedInApiClientTest extends TestCase {
      * @throws java.lang.Exception
      */
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {}
+    public static void setUpBeforeClass() throws Exception {
+        Assume.assumeTrue("LinkedIn API keys and other settings are required", 
+                TestConstants.isOAuthTestsRunnable());
+    }
 
     /**
      * @throws java.lang.Exception

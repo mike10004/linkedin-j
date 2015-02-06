@@ -16,7 +16,10 @@
  */
 package com.google.code.linkedinapi.client;
 
+import com.google.code.linkedinapi.client.constant.TestConstants;
 import com.google.code.linkedinapi.client.impl.LinkedInApiJaxbClient;
+import org.junit.Assume;
+import org.junit.BeforeClass;
 
 /**
  * @author Nabeel Mukhtar
@@ -26,13 +29,15 @@ public class LinkedInApiJaxbClientTest extends LinkedInApiClientTest {
 	
 	/** 
 	 * @see com.google.code.linkedinapi.client.LinkedInApiClientTest#setUp()
-	 */
-	public void setUp() throws Exception {
-		super.setUp();
-		client = factory.createLinkedInApiClient(LinkedInApiJaxbClient.class, accessToken);
-	}
+     */
+    public void setUp() throws Exception {
+        Assume.assumeTrue("LinkedIn API keys and other settings are required",
+                TestConstants.isOAuthTestsRunnable());
+        super.setUp();
+        client = factory.createLinkedInApiClient(LinkedInApiJaxbClient.class, accessToken);
+    }
 
-	/**
+    /**
 	 * @see com.google.code.linkedinapi.client.LinkedInApiClientTest#tearDown()
 	 */
 	public void tearDown() throws Exception {
