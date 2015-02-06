@@ -15,7 +15,9 @@
  * 
  */
 package com.google.code.linkedinapi.client.constant;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -24,18 +26,50 @@ import java.util.Properties;
  */
 public final class TestConstants {
 
+    public static final String PROP_TEST_CONSTANTS_FILE = "com.google.code.linkedinapi.client.TestConstantsFile";
+    
     /** Field description */
-    public static final String TEST_CONSTANTS_FILE = "TestConstants.properties";
+    private static final String TEST_CONSTANTS_FILE;
 
     /** Field description */
     private static final Properties testConstants = new Properties();
 
+    private static final boolean oauthTestsRunnable;
+
     static {
-        try {
-            testConstants.load(TestConstants.class.getResourceAsStream(TEST_CONSTANTS_FILE));
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean oauthTestsRunnable_ = false;
+        TEST_CONSTANTS_FILE = System.getProperty(PROP_TEST_CONSTANTS_FILE);
+        if (TEST_CONSTANTS_FILE == null) {
+            System.err.println("To run the OAuth tests, create a properties "
+                    + "file with the entries as specified in this class and"
+                    + "set the value of system property "
+                    + "'com.google.code.linkedinapi.client.TestConstantsFile' "
+                    + "to the file pathname. If the value of POM property "
+                    + "'com.willisju.linkedinj:com.google.code.linkedinapi.client.TestConstantsFile' "
+                    + "is present in your Maven user settings, it will propagate.");
+        } else {
+            InputStream in = null;
+            try {
+                in = new FileInputStream(TEST_CONSTANTS_FILE);
+                testConstants.load(in);
+                oauthTestsRunnable_ = true;
+            } catch (IOException e) {
+                e.printStackTrace(System.err);
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e2) {
+                        System.err.println("failed to close file " + TEST_CONSTANTS_FILE + ": " + e2);
+                    }
+                }
+            }
         }
+        oauthTestsRunnable = oauthTestsRunnable_;
+    }
+    
+    public static boolean isOAuthTestsRunnable() {
+        return oauthTestsRunnable;
     }
     
     /** Field description */

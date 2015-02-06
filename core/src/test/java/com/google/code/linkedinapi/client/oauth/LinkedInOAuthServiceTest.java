@@ -31,8 +31,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import junit.framework.TestCase;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -41,12 +39,14 @@ import org.junit.Test;
 
 import com.google.code.linkedinapi.client.constant.ApplicationConstants;
 import com.google.code.linkedinapi.client.constant.TestConstants;
+import static org.junit.Assert.*;
+import org.junit.Assume;
 
 /**
  * @author nmukhtar
  *
  */
-public class LinkedInOAuthServiceTest extends TestCase {
+public final class LinkedInOAuthServiceTest {
 	
     /** Field description */
     protected LinkedInOAuthService service;
@@ -80,11 +80,15 @@ public class LinkedInOAuthServiceTest extends TestCase {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		assertNotNullOrEmpty(String.format(RESOURCE_MISSING_MESSAGE, "Consumer Key"), TestConstants.LINKED_IN_TEST_CONSUMER_KEY);
-		assertNotNullOrEmpty(String.format(RESOURCE_MISSING_MESSAGE, "Consumer Secret"), TestConstants.LINKED_IN_TEST_CONSUMER_SECRET);
-		LinkedInOAuthServiceFactory factory = LinkedInOAuthServiceFactory.getInstance();
-		service = factory.createLinkedInOAuthService(TestConstants.LINKED_IN_TEST_CONSUMER_KEY,
-                TestConstants.LINKED_IN_TEST_CONSUMER_SECRET);
+        Assume.assumeTrue("LinkedIn API keys and other settings are required", 
+                TestConstants.isOAuthTestsRunnable());
+        if (TestConstants.isOAuthTestsRunnable()) {
+            assertNotNullOrEmpty(String.format(RESOURCE_MISSING_MESSAGE, "Consumer Key"), TestConstants.LINKED_IN_TEST_CONSUMER_KEY);
+            assertNotNullOrEmpty(String.format(RESOURCE_MISSING_MESSAGE, "Consumer Secret"), TestConstants.LINKED_IN_TEST_CONSUMER_SECRET);
+            LinkedInOAuthServiceFactory factory = LinkedInOAuthServiceFactory.getInstance();
+            service = factory.createLinkedInOAuthService(TestConstants.LINKED_IN_TEST_CONSUMER_KEY,
+                    TestConstants.LINKED_IN_TEST_CONSUMER_SECRET);
+        }
 	}
 
 	/**
